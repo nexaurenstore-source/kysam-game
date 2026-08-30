@@ -33,14 +33,14 @@ func _create_hud() -> void:
 	status_label.text = "KYSAM GAME — LUTA"
 	status_label.add_theme_font_size_override("font_size", 28)
 	add_child(status_label)
-
-	player_health = _bar(Vector2(40, 75), 100.0)
-	player_energy = _bar(Vector2(40, 120), 100.0)
-	enemy_health = _bar(Vector2(900, 75), 70.0)
+	player_health = _bar(Vector2(40, 75), player.profile.max_health if player and player.profile else 100.0)
+	player_energy = _bar(Vector2(40, 120), player.profile.max_energy if player and player.profile else 100.0)
+	enemy_health = _bar(Vector2(900, 75), enemy.profile.max_health if enemy and enemy.profile else 100.0)
 
 	var controls := MobileControls.new()
 	controls.name = "MobileControls"
 	add_child(controls)
+	controls.move_input.connect(_move)
 	controls.attack_pressed.connect(_attack)
 	controls.defend_pressed.connect(_defend)
 	controls.dodge_pressed.connect(_dodge)
@@ -55,6 +55,10 @@ func _bar(position: Vector2, maximum: float) -> ProgressBar:
 	bar.show_percentage = false
 	add_child(bar)
 	return bar
+
+func _move(value: Vector2) -> void:
+	if player:
+		player.set_move_input(value)
 
 func _attack() -> void:
 	if player and enemy and battle_state and battle_state.is_fighting():

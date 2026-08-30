@@ -16,12 +16,12 @@ enum State {
 	DEFEAT
 }
 
-var current_state: State = State.IDLE
+var current_state: int = State.IDLE
 var state_time := 0.0
 
-signal state_changed(previous: State, current: State)
+signal state_changed(previous: int, current: int)
 
-func set_state(new_state: State) -> void:
+func set_state(new_state: int) -> void:
 	if new_state == current_state:
 		return
 	var previous := current_state

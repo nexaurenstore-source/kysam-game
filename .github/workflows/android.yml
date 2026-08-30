@@ -22,7 +22,7 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Godot Android SDK requirements
+      - name: Install Android SDK requirements
         shell: bash
         run: |
           set -euo pipefail
@@ -30,10 +30,9 @@ jobs:
             "platform-tools" \
             "build-tools;35.0.1" \
             "platforms;android-35" \
-            "cmdline-tools;latest" \
             "cmake;3.10.2.4988404" \
             "ndk;28.1.13356709"
-          yes | sdkmanager --licenses >/dev/null
+          yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null
 
       - name: Setup Godot 4.5.1
         uses: chickensoft-games/setup-godot@v2
@@ -75,6 +74,7 @@ jobs:
         run: |
           set -euo pipefail
           java -version
+          godot --version
           test -x "$ANDROID_HOME/platform-tools/adb"
           test -d "$ANDROID_HOME/platforms/android-35"
           test -d "$ANDROID_HOME/build-tools/35.0.1"

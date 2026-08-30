@@ -1,7 +1,7 @@
 extends Node3D
 
-## Kysam Game — Fundação da Fase 1.
-## Cria uma arena 3D simples, limites físicos, jogador de teste e câmera.
+## Kysam Game — Fase 1
+## Fundação do protótipo 3D.
 
 const ARENA_SIZE := Vector2(18.0, 12.0)
 
@@ -87,12 +87,10 @@ func _build_wall(parent: Node3D, wall_name: String, wall_position: Vector3, wall
 	wall.add_child(shape)
 
 func _build_player() -> void:
-	var player := get_node_or_null("Player") as CharacterBody3D
-	if player == null:
-		player = CharacterBody3D.new()
-		player.name = "Player"
-		player.position = Vector3(0, 1.0, 2.5)
-		add_child(player)
+	var player := CharacterBody3D.new()
+	player.name = "Player"
+	player.position = Vector3(0, 1.0, 2.5)
+	add_child(player)
 
 	var collision := CollisionShape3D.new()
 	var capsule := CapsuleShape3D.new()
@@ -114,11 +112,9 @@ func _build_player() -> void:
 	player.set_script(script)
 
 func _build_camera() -> void:
-	var camera := get_node_or_null("Camera") as Camera3D
-	if camera == null:
-		camera = Camera3D.new()
-		camera.name = "Camera"
-		add_child(camera)
+	var camera := Camera3D.new()
+	camera.name = "Camera"
 	camera.position = Vector3(0, 7.0, 10.0)
 	camera.rotation_degrees = Vector3(-28.0, 0.0, 0.0)
 	camera.current = true
+	add_child(camera)

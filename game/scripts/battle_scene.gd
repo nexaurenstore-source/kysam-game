@@ -5,15 +5,17 @@ extends Node3D
 
 var player: Fighter
 var enemy: Fighter
-var battle_demo: BattleDemo
+var battle_state: BattleState
+var hud: MobileBattleHUD
 
 func _ready() -> void:
 	_build_environment()
 	_build_arena()
 	_create_fighters()
-	battle_demo = BattleDemo.new()
-	add_child(battle_demo)
-	battle_demo.configure(player, enemy)
+	battle_state = BattleState.new()
+	add_child(battle_state)
+	battle_state.start_battle()
+	_create_hud()
 
 func _build_environment() -> void:
 	var world := WorldEnvironment.new()
@@ -25,7 +27,6 @@ func _build_environment() -> void:
 	environment.ambient_light_energy = 0.8
 	world.environment = environment
 	add_child(world)
-
 	var light := DirectionalLight3D.new()
 	light.rotation_degrees = Vector3(-55, -25, 0)
 	light.light_energy = 1.3
@@ -36,7 +37,6 @@ func _build_arena() -> void:
 	var body := StaticBody3D.new()
 	body.name = "Arena"
 	add_child(body)
-
 	_add_box(body, "Chao", Vector3(18, 0.2, 12), Vector3(0, -0.1, 0))
 	_add_box(body, "LimiteNorte", Vector3(18, 2, 0.5), Vector3(0, 1, -6))
 	_add_box(body, "LimiteSul", Vector3(18, 2, 0.5), Vector3(0, 1, 6))
@@ -76,7 +76,6 @@ func _create_fighter(fighter_name: String, fighter_position: Vector3, profile: C
 	fighter.health = profile.max_health
 	fighter.energy = profile.max_energy
 	add_child(fighter)
-
 	var mesh := MeshInstance3D.new()
 	var capsule := CapsuleMesh.new()
 	capsule.radius = 0.5
@@ -84,7 +83,6 @@ func _create_fighter(fighter_name: String, fighter_position: Vector3, profile: C
 	mesh.mesh = capsule
 	mesh.position.y = 1.0
 	fighter.add_child(mesh)
-
 	var collision := CollisionShape3D.new()
 	var shape := CapsuleShape3D.new()
 	shape.radius = 0.5
@@ -93,3 +91,9 @@ func _create_fighter(fighter_name: String, fighter_position: Vector3, profile: C
 	collision.position.y = 1.0
 	fighter.add_child(collision)
 	return fighter
+
+func _create_hud() -> void:
+	hud = MobileBattleHUD.new()
+	hud.name = "BattleHUD"
+	add_child(hud)
+	hud.setup(player, enemy, battle_state)

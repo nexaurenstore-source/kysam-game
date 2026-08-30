@@ -3,7 +3,7 @@ name: Build Kysam Game Android
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-android:
@@ -39,25 +39,24 @@ jobs:
           use-dotnet: false
           include-templates: true
 
-      - name: Configure Godot Android export
+      - name: Configure Godot Android paths
+        shell: bash
         run: |
-          mkdir -p "$HOME/.config/godot" "$HOME/.android"
+          mkdir -p "$HOME/.config/godot"
           cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
 
           [resource]
           export/android/java_sdk_path = "$JAVA_HOME"
           export/android/android_sdk_path = "$ANDROID_HOME"
-          export/android/debug_keystore = "$HOME/.android/debug.keystore"
-          export/android/debug_keystore_user = "androiddebugkey"
-          export/android/debug_keystore_pass = "android"
           EOF
 
       - name: Generate Android debug keystore
+        shell: bash
         run: |
+          mkdir -p "$HOME/.android"
           rm -f "$HOME/.android/debug.keystore"
           keytool -genkeypair \
-            -v \
             -keystore "$HOME/.android/debug.keystore" \
             -storepass android \
             -keypass android \
@@ -68,7 +67,9 @@ jobs:
             -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Validate Android environment
+        shell: bash
         run: |
+          set -e
           java -version
           adb version
           test -x "$ANDROID_HOME/platform-tools/adb"
@@ -79,16 +80,19 @@ jobs:
           test -s "$HOME/.android/debug.keystore"
 
       - name: Validate project
-        run: godot --headless --path . --editor --quit
+        shell: bash
+        run: |
+          godot --headless --path . --editor --quit
 
       - name: Export Android APK
-        env:
-          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: ${{ env.HOME }}/.android/debug.keystore
-          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
-          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
+        shell: bash
         run: |
+          set -e
           mkdir -p build/Android
-          godot --headless --path . --export-debug "Android" build/Android/KysamGame.apk
+          export GODOT_ANDROID_KEYSTORE_DEBUG_PATH="$HOME/.android/debug.keystore"
+          export GODOT_ANDROID_KEYSTORE_DEBUG_USER="androiddebugkey"
+          export GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD="android"
+          godot --headless --path . --export-debug "Android" build/Android/KysamGame.apk --verbose
           test -s build/Android/KysamGame.apk
 
       - name: Upload APK artifact

@@ -62,13 +62,27 @@ func _add_box(parent: Node3D, node_name: String, size: Vector3, position: Vector
 	part.add_child(collision)
 
 func _create_fighters() -> void:
-	player = _create_fighter("Kysam", Vector3(-3, 0, 0), KysamProfile.new())
+	player = _create_fighter("Kysam", Vector3(-3, 0, 0), _create_kysam_profile())
 	var enemy_profile := CharacterProfile.new()
 	enemy_profile.character_name = "Inimigo"
 	enemy_profile.max_health = 70
 	enemy_profile.max_energy = 50
 	enemy_profile.attack_power = 7
 	enemy = _create_fighter("Inimigo", Vector3(3, 0, 0), enemy_profile)
+
+func _create_kysam_profile() -> CharacterProfile:
+	var profile := CharacterProfile.new()
+	profile.character_name = "Kysam"
+	profile.max_health = 100
+	profile.max_energy = 100
+	profile.attack_power = 10
+	profile.defense_power = 5
+	profile.move_speed = 5
+	profile.weapon_name = "Lâmina de Kysam"
+	profile.weapon_description = "Lâmina especial usada nos ataques de Kysam."
+	profile.unique_power_name = "Ruptura de Energia"
+	profile.unique_power_description = "Impacto concentrado que causa dano elevado e knockback."
+	return profile
 
 func _create_fighter(fighter_name: String, fighter_position: Vector3, profile: CharacterProfile) -> Fighter:
 	var fighter := Fighter.new()

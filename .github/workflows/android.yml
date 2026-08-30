@@ -8,11 +8,12 @@ on:
 jobs:
   build-android:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v5
         with:
           distribution: temurin
@@ -21,18 +22,20 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android packages
+      - name: Install Godot Android SDK requirements
+        shell: bash
         run: |
+          set -euo pipefail
           sdkmanager --sdk_root="$ANDROID_HOME" \
             "platform-tools" \
-            "platforms;android-35" \
             "build-tools;35.0.1" \
+            "platforms;android-35" \
             "cmdline-tools;latest" \
             "cmake;3.10.2.4988404" \
             "ndk;28.1.13356709"
           yes | sdkmanager --licenses >/dev/null
 
-      - name: Setup Godot
+      - name: Setup Godot 4.5.1
         uses: chickensoft-games/setup-godot@v2
         with:
           version: 4.5.1
@@ -42,6 +45,7 @@ jobs:
       - name: Configure Godot Android paths
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p "$HOME/.config/godot"
           cat > "$HOME/.config/godot/editor_settings-4.tres" <<EOF
           [gd_resource type="EditorSettings" format=3]
@@ -51,12 +55,12 @@ jobs:
           export/android/android_sdk_path = "$ANDROID_HOME"
           EOF
 
-      - name: Generate Android debug keystore
+      - name: Prepare Android debug keystore
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p "$HOME/.android"
-          rm -f "$HOME/.android/debug.keystore"
-          keytool -genkeypair \
+          keytool -genkeypair -noprompt \
             -keystore "$HOME/.android/debug.keystore" \
             -storepass android \
             -keypass android \
@@ -66,12 +70,11 @@ jobs:
             -validity 10000 \
             -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Validate Android environment
+      - name: Validate Android toolchain
         shell: bash
         run: |
-          set -e
+          set -euo pipefail
           java -version
-          adb version
           test -x "$ANDROID_HOME/platform-tools/adb"
           test -d "$ANDROID_HOME/platforms/android-35"
           test -d "$ANDROID_HOME/build-tools/35.0.1"
@@ -79,23 +82,25 @@ jobs:
           test -d "$ANDROID_HOME/cmake/3.10.2.4988404"
           test -s "$HOME/.android/debug.keystore"
 
-      - name: Validate project
+      - name: Validate Godot project
         shell: bash
         run: |
+          set -euo pipefail
           godot --headless --path . --editor --quit
 
-      - name: Export Android APK
+      - name: Export debug APK
         shell: bash
+        env:
+          GODOT_ANDROID_KEYSTORE_DEBUG_PATH: /home/runner/.android/debug.keystore
+          GODOT_ANDROID_KEYSTORE_DEBUG_USER: androiddebugkey
+          GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD: android
         run: |
-          set -e
+          set -euo pipefail
           mkdir -p build/Android
-          export GODOT_ANDROID_KEYSTORE_DEBUG_PATH="$HOME/.android/debug.keystore"
-          export GODOT_ANDROID_KEYSTORE_DEBUG_USER="androiddebugkey"
-          export GODOT_ANDROID_KEYSTORE_DEBUG_PASSWORD="android"
-          godot --headless --path . --export-debug "Android" build/Android/KysamGame.apk --verbose
+          godot --headless --path . --export-debug "Android" build/Android/KysamGame.apk
           test -s build/Android/KysamGame.apk
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: KysamGame-Android

@@ -1,83 +1,67 @@
 # Kysam Game
 
-> A 3D action fighting game set in the Kysam universe.
+Jogo de ação, luta e aventura desenvolvido primeiro para Android.
 
-## Vision
+## Idioma
 
-Kysam is being designed first as a focused 3D fighting experience for Android, inspired by the feel of games such as Tekken and Shadow Fight, while keeping its own identity.
+🇵🇹 **Português** é o idioma padrão do projeto nesta fase.
 
-The player fights in compact arenas with clear boundaries. Characters can run, reposition, dodge and attack freely within the arena instead of being locked to a single fighting line.
+## Visão
 
-The long-term vision expands the combat foundation into exploration, hunting, missions and larger open-world areas.
+Kysam começa como uma experiência de luta 3D focada, inspirada na sensação de jogos como Tekken e Shadow Fight, mas com identidade própria.
 
-## Platform
+O jogador luta em arenas compactas com limites claros. Os personagens podem correr, reposicionar-se, esquivar-se e atacar livremente dentro da arena, sem ficar presos a uma única linha de combate.
 
-- Android 5.0 (API 21) and newer
-- Mobile-first controls
-- Performance-conscious 3D rendering
+No futuro, a base de combate poderá crescer para exploração, caça, missões e áreas maiores de mundo aberto.
 
-## Visual direction
+## Plataforma
 
-- Semi-realistic 3D characters and environments
-- Cinematic combat presentation
-- Realistic proportions and materials
-- No pure cartoon/anime visual style
-- Target: a strong visual direction inspired by modern fighting games, adapted realistically to mobile hardware
+- Android 5.0 (API 21) e superior
+- Controles pensados para toque
+- Renderização 3D otimizada para dispositivos móveis
 
-## Core gameplay — Phase 1
+## Direção visual
 
-1. Character selection
-2. Compact 3D arena
-3. Free movement inside arena limits
-4. Light and heavy attacks
-5. Blocking and dodging
-6. Combos
-7. Health and stamina systems
-8. Enemy AI
-9. Victory / defeat flow
-10. Mobile HUD and touch controls
+- Personagens e ambientes 3D realistas/semi-realistas
+- Apresentação cinematográfica do combate
+- Proporções e materiais realistas
+- Evitar estética de desenho animado puro
+- Objetivo visual ambicioso, adaptado ao hardware móvel
 
-## Main characters
+## Fase 1 — Fundação
+
+- Estrutura inicial do projeto
+- Base compatível com Android 5+
+- Arena 3D compacta
+- Limites da arena
+- Movimento livre dentro da arena
+- Base do controlador do jogador
+- Base da câmera
+- Arquitetura preparada para combate
+- Treino com inimigo básico
+
+## Personagens
+
+A primeira versão terá **10 personagens**, incluindo Kysam e Elian.
+
+Consulte `docs/personagens.md` para o elenco inicial.
 
 ### Kysam
-The central protagonist and hunter of the saga.
+Protagonista e caçador central do universo.
 
 ### Elian
-Kysam's girlfriend and an important warrior. Elian is an excellent fighter, highly skilled in close combat, and will have her own fighting style, abilities and progression.
+Namorada de Kysam e uma guerreira importante. É uma excelente lutadora, especializada em combate corpo a corpo, com estilo, habilidades e progressão próprios.
 
-## Development roadmap
+## Roadmap
 
-### Phase 1 — Combat prototype
-- Player controller
-- Camera
-- Arena boundaries
-- Basic combat
-- Training enemy
-- Android-compatible foundation
+1. **Fase 1 — Fundação:** estrutura, arena, movimento e câmera.
+2. **Fase 2 — Combate:** ataques, defesa, esquiva, vida, stamina, combos e IA.
+3. **Fase 3 — 10 personagens:** seleção, estilos e integração dos personagens.
+4. **Fase 4 — Apresentação:** modelos 3D, animações, iluminação, efeitos, áudio, menus e HUD.
+5. **Fase 5 — Primeira versão jogável:** gerar APK e testar no Android.
+6. **Fase 6 — Expansão:** novas arenas, sistemas e conteúdo.
+7. **Fase 7 — Mundo aberto:** caça, missões, exploração e áreas maiores.
 
-### Phase 2 — Fighting system
-- Combos
-- Dodge / block
-- Hit reactions
-- AI states
-- Character selection
-- Elian integration
+## Princípio de desenvolvimento
 
-### Phase 3 — Presentation
-- Character models
-- Animations
-- Lighting
-- Effects
-- Audio
-- Menus and HUD
-
-### Phase 4 — Expansion
-- Hunting
-- Missions
-- Exploration
-- Larger areas
-- Open-world systems
-
-## Important principle
-
-We build the combat foundation first. The open world comes later. Every system should be modular so the first compact arenas can evolve into the future Kysam world without rebuilding the project from zero.
+Construímos primeiro uma base de combate funcional. O mundo aberto vem depois. Os sistemas devem ser modulares para que as arenas iniciais possam evoluir para o futuro mundo de Kysam sem reconstruir o projeto do zero.

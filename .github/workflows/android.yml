@@ -12,18 +12,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build with Godot
-        uses: firebelley/godot-export@v6.1.0
+      - name: Setup Godot
+        uses: chickensoft-games/setup-godot@v2
         with:
-          godot_executable_download_url: https://downloads.godotengine.org/4.5.1/Godot_v4.5.1-stable_linux.x86_64.zip
-          godot_export_templates_download_url: https://downloads.godotengine.org/4.5.1/Godot_v4.5.1-stable_export_templates.tpz
-          relative_project_path: ./
-          archive_output: true
-          export_preset: Android
+          version: 4.5.1
+          use-dotnet: false
+          include-templates: true
+
+      - name: Export Android APK
+        run: |
+          mkdir -p build/Android
+          godot --headless --path . --editor --quit
+          godot --headless --path . --export-debug "Android" build/Android/KysamGame.apk
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: KysamGame-Android
-          path: build/Android/*
+          path: build/Android/KysamGame.apk
           if-no-files-found: error

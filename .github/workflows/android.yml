@@ -32,7 +32,7 @@ jobs:
             "platforms;android-35" \
             "cmake;3.10.2.4988404" \
             "ndk;28.1.13356709"
-          yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null
+          yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null || true
 
       - name: Setup Godot 4.5.1
         uses: chickensoft-games/setup-godot@v2

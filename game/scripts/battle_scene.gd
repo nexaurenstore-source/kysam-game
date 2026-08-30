@@ -7,6 +7,7 @@ var player: Fighter
 var enemy: Fighter
 var battle_state: BattleState
 var hud: MobileBattleHUD
+var combat_camera: CombatCamera
 
 func _ready() -> void:
 	_build_environment()
@@ -15,6 +16,7 @@ func _ready() -> void:
 	battle_state = BattleState.new()
 	add_child(battle_state)
 	battle_state.start_battle()
+	_create_camera()
 	_create_hud()
 
 func _build_environment() -> void:
@@ -91,6 +93,13 @@ func _create_fighter(fighter_name: String, fighter_position: Vector3, profile: C
 	collision.position.y = 1.0
 	fighter.add_child(collision)
 	return fighter
+
+func _create_camera() -> void:
+	combat_camera = CombatCamera.new()
+	combat_camera.name = "CombatCamera"
+	add_child(combat_camera)
+	combat_camera.setup(player, enemy)
+	combat_camera.global_position = Vector3(0, 4, 8)
 
 func _create_hud() -> void:
 	hud = MobileBattleHUD.new()
